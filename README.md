@@ -37,7 +37,11 @@ Start a new Claude Code session afterward so the skill is picked up.
 /composer-delegate rename the `fetchUser` helper to `loadUser` everywhere and run the tests
 ```
 
-The skill only runs when you invoke it, and covers that one request.
+The skill only runs when you invoke it:
+
+- `/composer-delegate <request>` — covers that one request.
+- `/composer-delegate on` — stays active for every request in the conversation.
+- `/composer-delegate off` — turns it off.
 
 ## Things to know
 

@@ -1,6 +1,6 @@
 ---
 name: composer-delegate
-description: Delegate work to Cursor's Composer model through the cursor-agent CLI while the lead model directs and reviews. Use only when the user explicitly invokes /composer-delegate. Covers the one request it is invoked with.
+description: Delegate work to Cursor's Composer model through the cursor-agent CLI while the lead model directs and reviews. Use only when the user explicitly invokes /composer-delegate. Bare invocation covers one request; `on` stays active in the current conversation until `off`.
 ---
 
 # Composer Delegate
@@ -9,7 +9,17 @@ You are the lead. Composer 2.5, run through the `cursor-agent` CLI, is the worke
 
 ## 1. Activation
 
-Activate only when the user explicitly invokes `/composer-delegate <request>`. It covers that one request, including its clarifications and corrections, and ends when the request completes. A general request to "delegate" something does not activate it.
+Support exactly these controls:
+
+- Bare `/composer-delegate` activates one-shot mode for the request containing the invocation, or for the next request when invoked alone. It stays active through that request's clarifications, corrections, and review, and ends when the request completes or the user cancels it.
+- `/composer-delegate on` activates persistent mode for every subsequent request in the current conversation until `/composer-delegate off` or an explicit natural-language disable instruction. A request in the same message is covered too. Classify each new request separately under section 2.
+- `/composer-delegate off` immediately ends one-shot or persistent mode. It does not authorize pending work.
+
+Activate only on an explicit invocation. A general request to "delegate" something, or mentioning, quoting, or editing this skill, does not activate it. After `off`, earlier context does not reactivate it; require a fresh invocation.
+
+An activation-only message selects the mode. Acknowledge it briefly and wait for the request. Honor stop, cancellation, and disable messages immediately.
+
+Keep mode state in this conversation only. Do not persist it to disk, carry it into another conversation, or pass it to Composer; Composer receives the handoff, not this skill.
 
 This skill grants no new permission. Approvals the user or repository requires for edits, commits, or pushes still apply.
 
